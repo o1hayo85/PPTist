@@ -42,12 +42,12 @@
           :elementId="elementInfo.id"
           :defaultColor="elementInfo.defaultColor"
           :defaultFontName="elementInfo.defaultFontName"
-          :editable="!elementInfo.lock"
+          :editable="false"
           :value="elementInfo.content"
           :style="{
             '--paragraphSpace': `${elementInfo.paragraphSpace === undefined ? 5 : elementInfo.paragraphSpace}px`,
           }"
-          @update="({ value, ignore }) => updateContent(value, ignore)"
+          @update="() => {}"
           @mousedown="$event => handleSelectElement($event, false)"
         />
 
@@ -91,6 +91,12 @@ const { shadowStyle } = useElementShadow(shadow)
 
 const handleSelectElement = (e: MouseEvent | TouchEvent, canMove = true) => {
   if (props.elementInfo.lock) return
+  // 只读模式：如果selectElement是空函数，则不执行任何操作
+  if (typeof props.selectElement !== 'function' || props.selectElement.toString() === '() => {}') {
+    e.preventDefault()
+    e.stopPropagation()
+    return
+  }
   e.stopPropagation()
 
   props.selectElement(e, props.elementInfo, canMove)

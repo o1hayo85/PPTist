@@ -1,8 +1,8 @@
 <template>
   <div class="fullscreen-spin" :class="{ 'mask': mask }" v-if="loading">
     <div class="spin">
-      <div class="spinner"></div>
-      <div class="text">{{tip}}</div>
+      <div class="spinner" :style="{ borderColor: themeColor, borderTopColor: 'transparent' }"></div>
+      <div class="text" :style="{ color: themeColor }">{{tip}}</div>
     </div>
   </div>
 </template>
@@ -17,6 +17,9 @@ withDefaults(defineProps<{
   mask: true,
   tip: '',
 })
+
+// 直接使用主题色，确保从一开始就正确显示
+const themeColor = '#69b8c5'
 </script>
 
 <style lang="scss" scoped>
@@ -51,14 +54,13 @@ withDefaults(defineProps<{
 .spinner {
   width: 36px;
   height: 36px;
-  border: 3px solid $themeColor;
-  border-top-color: transparent;
+  border: 3px solid;
   border-radius: 50%;
   animation: spinner .8s linear infinite;
+  box-sizing: border-box;
 }
 .text {
   margin-top: 20px;
-  color: $themeColor;
 }
 @keyframes spinner {
   0% {

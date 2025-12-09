@@ -10,8 +10,8 @@
     <component
       :is="currentElementComponent"
       :elementInfo="elementInfo"
-      :selectElement="selectElement"
-      :contextmenus="contextmenus"
+      :selectElement="() => {}"
+      :contextmenus="() => []"
     ></component>
   </div>
 </template>

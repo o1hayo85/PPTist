@@ -33,12 +33,10 @@
         <div 
           class="table-mask" 
           :class="{ 'lock': elementInfo.lock }"
-          v-if="!editable || elementInfo.lock"
-          @dblclick="startEdit()"
+          v-if="true"
           @mousedown="$event => handleSelectElement($event)"
           @touchstart="$event => handleSelectElement($event)"
         >
-          <div class="mask-tip" v-if="handleElementId === elementInfo.id" :style="{ transform: `scale(${ 1 / canvasScale })` }">双击编辑</div>
         </div>
       </div>
     </div>
@@ -76,11 +74,11 @@ const handleSelectElement = (e: MouseEvent | TouchEvent) => {
   props.selectElement(e, props.elementInfo)
 }
 
-// 更新表格的可编辑状态，表格处于编辑状态时需要禁用全局快捷键
+// 只读模式：禁用表格编辑
 const editable = ref(false)
 
 watch(handleElementId, () => {
-  if (handleElementId.value !== props.elementInfo.id) editable.value = false
+  editable.value = false
 })
 
 watch(editable, () => {
@@ -88,7 +86,8 @@ watch(editable, () => {
 })
 
 const startEdit = () => {
-  if (!props.elementInfo.lock) editable.value = true
+  // 只读模式：禁用编辑
+  editable.value = false
 }
 
 // 监听表格元素的尺寸变化，当高度变化时，更新高度到vuex

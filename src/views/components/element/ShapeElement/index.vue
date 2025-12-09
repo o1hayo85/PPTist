@@ -29,7 +29,6 @@
         @mousedown="$event => handleSelectElement($event)"
         @mouseup="execFormatPainter()"
         @touchstart="$event => handleSelectElement($event)"
-        @dblclick="startEdit()"
       >
         <svg 
           overflow="visible" 
@@ -74,10 +73,10 @@
             :elementId="elementInfo.id"
             :defaultColor="text.defaultColor"
             :defaultFontName="text.defaultFontName"
-            :editable="!elementInfo.lock"
+            :editable="false"
             :value="text.content"
-            @update="({ value, ignore }) => updateText(value, ignore)"
-            @blur="checkEmptyText()"
+            @update="() => {}"
+            @blur="() => {}"
             @mousedown="$event => handleSelectElement($event, false)"
           />
         </div>
@@ -148,12 +147,11 @@ const flipH = computed(() => props.elementInfo.flipH)
 const flipV = computed(() => props.elementInfo.flipV)
 const { flipStyle } = useElementFlip(flipH, flipV)
 
+// 只读模式：禁用编辑
 const editable = ref(false)
 
 watch(handleElementId, () => {
-  if (handleElementId.value !== props.elementInfo.id) {
-    if (editable.value) editable.value = false
-  }
+  editable.value = false
 })
 
 const text = computed<ShapeText>(() => {
@@ -179,19 +177,13 @@ const updateText = (content: string, ignore = false) => {
 }
 
 const checkEmptyText = () => {
-  if (!props.elementInfo.text) return
-
-  const pureText = props.elementInfo.text.content.replace(/<[^>]+>/g, '')
-  if (!pureText) {
-    slidesStore.removeElementProps({ id: props.elementInfo.id, propName: 'text' })
-    addHistorySnapshot()
-  }
+  // 只读模式：禁用
 }
 
 const prosemirrorEditorRef = useTemplateRef<InstanceType<typeof ProsemirrorEditor>>('prosemirrorEditorRef')
 const startEdit = () => {
-  editable.value = true
-  nextTick(() => prosemirrorEditorRef.value && prosemirrorEditorRef.value.focus())
+  // 只读模式：禁用编辑
+  editable.value = false
 }
 </script>
 
