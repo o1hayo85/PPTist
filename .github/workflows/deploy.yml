@@ -54,12 +54,12 @@ jobs:
             docker rm ${{ env.DOCKER_CONTAINER }} || true 
 
             # 启动新容器 
-            docker run -d \ 
-              --name ${{ env.DOCKER_CONTAINER }} \ 
-              --restart unless-stopped \ 
-              -p ${{ env.DOCKER_PORT }}:80 \ 
-              -m 128m \ 
-              -v /var/log/pptist:/var/log/nginx \ 
+            docker run -d \
+              --name ${{ env.DOCKER_CONTAINER }} \
+              --restart unless-stopped \
+              -p ${{ env.DOCKER_PORT }}:80 \
+              -m 128m \
+              -v /var/log/pptist:/var/log/nginx \
               ${{ secrets.DOCKER_USERNAME }}/${{ env.DOCKER_IMAGE }}:latest 
 
             # 测试 Nginx 配置 
