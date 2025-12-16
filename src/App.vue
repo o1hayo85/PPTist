@@ -66,6 +66,9 @@ const loadPPTFromURL = async () => {
   const pptUrl = urlParams.get('url') || urlParams.get('ppt') || urlParams.get('file')
   
   if (pptUrl) {
+    // 将 pptUrl 保存到 mainStore
+    mainStore.setPptUrl(pptUrl)
+
     try {
       loading.value = true
       // 下载文件

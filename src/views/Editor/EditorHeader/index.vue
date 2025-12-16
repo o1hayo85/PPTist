@@ -10,6 +10,11 @@
     </div>
 
     <div class="right">
+      <!-- 下载按钮 -->
+      <div v-if="pptUrl" class="menu-item" v-tooltip="'下载文件'" @click="downloadFile">
+        <IconDownload class="icon" />
+      </div>
+      
       <div class="group-menu-item">
         <div class="menu-item" v-tooltip="'幻灯片放映（F5）'" @click="enterScreening()">
           <IconPpt class="icon" />
@@ -29,15 +34,29 @@
 
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
-import { useSlidesStore } from '@/store'
+import { useSlidesStore, useMainStore } from '@/store'
 import useScreening from '@/hooks/useScreening'
 
 import Popover from '@/components/Popover.vue'
 import PopoverMenuItem from '@/components/PopoverMenuItem.vue'
 
 const slidesStore = useSlidesStore()
+const mainStore = useMainStore()
 const { title } = storeToRefs(slidesStore)
+const { pptUrl } = storeToRefs(mainStore)
 const { enterScreening, enterScreeningFromStart } = useScreening()
+
+// 下载文件函数
+const downloadFile = () => {
+  if (!pptUrl.value) return
+  
+  const link = document.createElement('a')
+  link.href = pptUrl.value
+  link.download = pptUrl.value.split('/').pop() || 'presentation.pptx'
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+}
 </script>
 
 <style lang="scss" scoped>
