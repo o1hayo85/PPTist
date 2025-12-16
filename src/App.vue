@@ -68,6 +68,9 @@ const loadPPTFromURL = async () => {
   if (pptUrl) {
     // 将 pptUrl 保存到 mainStore
     mainStore.setPptUrl(pptUrl)
+    // 从 URL 中提取文件名并更新标题
+    const fileName = pptUrl.split('/').pop() || '未命名演示文稿'
+    slidesStore.setTitle(fileName)
 
     try {
       loading.value = true
